@@ -3,7 +3,7 @@
 import os
 import requests
 from PIL import Image
-import math
+import math,time
 
 def imagesget():
     os.mkdir('images')
@@ -24,7 +24,7 @@ def convert_image(image):
             pix=image.getpixel((x,y))
             if pix<120:#灰度低于120 设置为 0
                 image2.putpixel((x,y),0)
-    image2.save('L.jpeg')#将灰度图存储下来看效果
+    image2.save('L.png')#将灰度图存储下来看效果
     return image2
 
 def cut_image(image):
@@ -86,12 +86,14 @@ class CaptchaRecognize:
 
     #计算矢量之间的 cos 值
     def relation(self,concordance1, concordance2):
-            
+
         relevance = 0
         topvalue = 0
         for word, count in concordance1.items():
             if word in concordance2:
+                print type(topvalue),topvalue,count,concordance2[word]
                 topvalue += count * concordance2[word]
+                time.sleep(10)
         return topvalue / (self.magnitude(concordance1) * self.magnitude(concordance2))
 
     def recognise(self,image):
@@ -119,7 +121,8 @@ class CaptchaRecognize:
 if __name__=='__main__':
     imageRecognize=CaptchaRecognize()
     # 设置图片路径
-    image=Image.open('3.jpeg')
+    image=Image.open('3.png')
+    print image.mode
 
     result=imageRecognize.recognise(image)
 
